@@ -2482,11 +2482,11 @@
 		},
 		{
 			"ImportPath": "github.com/spf13/cobra",
-			"Rev": "f62e98d28ab7ad31d707ba837a966378465c7b57"
+			"Rev": "32a82c5c48a9741571c22d8a6b53fa582f766747"
 		},
 		{
 			"ImportPath": "github.com/spf13/cobra/doc",
-			"Rev": "f62e98d28ab7ad31d707ba837a966378465c7b57"
+			"Rev": "32a82c5c48a9741571c22d8a6b53fa582f766747"
 		},
 		{
 			"ImportPath": "github.com/spf13/jwalterweatherman",
@@ -2494,7 +2494,8 @@
 		},
 		{
 			"ImportPath": "github.com/spf13/pflag",
-			"Rev": "9ff6c6923cfffbcd502984b8e0c80539a94968b7"
+			"Comment": "v1.0.0-3-g7aff26d",
+			"Rev": "7aff26db30c1be810f9de5038ec5ef96ac41fd7c"
 		},
 		{
 			"ImportPath": "github.com/spf13/viper",
@@ -3132,6 +3133,11 @@
 		{
 			"ImportPath": "vbom.ml/util/sortorder",
 			"Rev": "db5cfe13f5cc80a4990d98e2e1b0707a4d1a5394"
+		},
+		{
+			"ImportPath": "github.com/chzyer/readline",
+			"Comment": "v1.4-24-g41eea22",
+			"Rev": "41eea22f717c616615e1e59aa06cf831f9901f35"
 		}
 	]
 }
