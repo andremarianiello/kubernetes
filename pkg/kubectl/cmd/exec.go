@@ -62,7 +62,7 @@ const (
 )
 
 func NewCmdExec(f cmdutil.Factory, cmdIn io.Reader, cmdOut, cmdErr io.Writer) *cobra.Command {
-	options := &ExecOptions{
+	emptyOptions := ExecOptions{
 		StreamOptions: StreamOptions{
 			In:  cmdIn,
 			Out: cmdOut,
@@ -71,16 +71,19 @@ func NewCmdExec(f cmdutil.Factory, cmdIn io.Reader, cmdOut, cmdErr io.Writer) *c
 
 		Executor: &DefaultRemoteExecutor{},
 	}
+	options := emptyOptions
 	cmd := &cobra.Command{
 		Use:     "exec POD [-c CONTAINER] -- COMMAND [args...]",
 		Short:   i18n.T("Execute a command in a container"),
 		Long:    "Execute a command in a container.",
 		Example: exec_example,
 		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Printf("exec args: %s\n", args)
 			argsLenAtDash := cmd.ArgsLenAtDash()
 			cmdutil.CheckErr(options.Complete(f, cmd, args, argsLenAtDash))
 			cmdutil.CheckErr(options.Validate())
 			cmdutil.CheckErr(options.Run())
+			options = emptyOptions
 		},
 	}
 	cmd.Flags().StringVarP(&options.PodName, "pod", "p", "", "Pod name")
@@ -153,6 +156,7 @@ func (p *ExecOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, argsIn []s
 		return cmdutil.UsageErrorf(cmd, execUsageStr)
 	}
 	if len(p.PodName) != 0 {
+		fmt.Printf("POD_NAME: %s\n", p.PodName)
 		printDeprecationWarning("exec POD_NAME", "-p POD_NAME")
 		if len(argsIn) < 1 {
 			return cmdutil.UsageErrorf(cmd, execUsageStr)
@@ -282,6 +286,7 @@ func (p *ExecOptions) Run() error {
 			if len(p.SuggestedCmdUsage) > 0 {
 				usageString = fmt.Sprintf("%s\n%s", usageString, p.SuggestedCmdUsage)
 			}
+			fmt.Printf("p.Err: %s\n", p.Err)
 			fmt.Fprintf(p.Err, "%s\n", usageString)
 		}
 		containerName = pod.Spec.Containers[0].Name

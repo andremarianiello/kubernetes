@@ -90,9 +90,20 @@ func DefaultBehaviorOnFatal() {
 	fatalErrHandler = fatal
 }
 
+// DefaultBehaviorOnFatal allows you to undo any previous override.  Useful in
+// tests.
+func NonfatalBehaviorOnFatal() {
+	fatalErrHandler = finalMessage
+}
+
 // fatal prints the message (if provided) and then exits. If V(2) or greater,
 // glog.Fatal is invoked for extended information.
 func fatal(msg string, code int) {
+	finalMessage(msg, code)
+	os.Exit(code)
+}
+
+func finalMessage(msg string, _ int) {
 	if glog.V(2) {
 		glog.FatalDepth(2, msg)
 	}
@@ -103,7 +114,6 @@ func fatal(msg string, code int) {
 		}
 		fmt.Fprint(os.Stderr, msg)
 	}
-	os.Exit(code)
 }
 
 // ErrExit may be passed to CheckError to instruct it to output nothing but exit with

@@ -19,6 +19,7 @@ package cmd
 import (
 	"fmt"
 	"io"
+	"os"
 
 	"k8s.io/apiserver/pkg/util/flag"
 	"k8s.io/client-go/tools/clientcmd"
@@ -32,6 +33,7 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
+	"github.com/chzyer/readline"
 )
 
 const (
@@ -261,7 +263,17 @@ func NewKubectlCommand(f cmdutil.Factory, in io.Reader, out, err io.Writer) *cob
       kubectl controls the Kubernetes cluster manager.
 
       Find more information at https://github.com/kubernetes/kubernetes.`),
-		Run: runHelp,
+		//Run: runHelp,
+		Run: func(cmd *cobra.Command, args []string) {
+			cmdutil.NonfatalBehaviorOnFatal()
+			cmd.ExecuteInteractive(&readline.Config{
+				Prompt: fmt.Sprintf(" $ "),
+				HistoryFile: os.Getenv("HOME") + "/.kube/history",
+			}, func(err error) error {
+				fmt.Fprintf(out, "custom: received err: %s", err)
+				return nil
+			})
+		},
 		BashCompletionFunction: bashCompletionFunc,
 	}
 
